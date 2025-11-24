@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Chronomètre Pro</title>
+    <title>Chronomètre Professionnel</title>
 
     <style>
         :root {
@@ -46,11 +46,7 @@
             display: inline-block;
             margin-bottom: 30px;
             box-shadow: 0 0 60px rgba(255,255,255,0.06);
-            transition: transform 0.08s ease, filter 0.4s ease;
-        }
-
-        .buttons {
-            margin-top: 25px;
+            transition: transform 0.08s ease, filter 0.4s ease, text-shadow 0.3s ease;
         }
 
         button {
@@ -66,21 +62,16 @@
             transition: 0.25s;
         }
 
-        button:hover {
-            transform: scale(1.08);
-            filter: brightness(1.2);
-        }
-
-        button:active {
-            transform: scale(0.95);
-        }
+        button:hover { transform: scale(1.08); filter: brightness(1.2); }
+        button:active { transform: scale(0.95); }
 
         #btnStart { background-color: #27ae60; }
         #btnStop { background-color: #c0392b; }
         #btnReset { background-color: #7f8c8d; }
-        #btnAddTime { background-color: #2980b9; }
-        #btnTheme { background-color: #8e44ad; }
         #btnFull { background-color: #f39c12; }
+        #btnTheme { background-color: #8e44ad; }
+        #btnAddTime { background-color: #2980b9; }
+        #btnRemoveTime { background-color: #d35400; }
 
         #panel {
             margin-top: 40px;
@@ -127,16 +118,19 @@
     </div>
 
     <div id="panel">
-        <label>Ajouter du temps :</label><br><br>
+        <label>Ajouter / Enlever du temps :</label><br><br>
+
         <input id="h" type="number" min="0" placeholder="hh"> :
         <input id="m" type="number" min="0" max="59" placeholder="mm"> :
         <input id="s" type="number" min="0" max="59" placeholder="ss">
         <br><br>
+
         <button id="btnAddTime">Ajouter</button>
+        <button id="btnRemoveTime">Enlever</button>
     </div>
 
     <audio id="startSound">
-        <source src="data:audio/mp3;base64,//uQZAAAAAAAAAAAAAAAA..." type="audio/mp3">
+        <source src="data:audio/mp3;base64,//uQZAAA..." type="audio/mp3">
     </audio>
 
     <script>
@@ -184,7 +178,6 @@
         function afficher(ms) {
             chronoEl.textContent = formatTime(ms);
 
-            // Effet glow premium : aucun flou, super fluide
             chronoEl.style.textShadow = "0 0 18px rgba(255,255,255,0.20)";
             chronoEl.style.transform = "scale(1.04)";
 
@@ -193,7 +186,6 @@
                 chronoEl.style.transform = "scale(1)";
             }, 90);
         }
-
 
         function maj() {
             if (!state.enCours) return;
@@ -210,10 +202,8 @@
                 state.enCours = true;
                 state.depart = Date.now();
                 saveState();
-
                 startSound.play();
                 if (navigator.vibrate) navigator.vibrate(100);
-
                 state.rafID = requestAnimationFrame(maj);
             }
         };
@@ -222,9 +212,7 @@
             if (state.enCours) {
                 state.enCours = false;
                 state.pauseTemps += Date.now() - state.depart;
-
                 if (navigator.vibrate) navigator.vibrate([80,40,80]);
-
                 saveState();
                 cancelAnimationFrame(state.rafID);
             }
@@ -235,9 +223,7 @@
             cancelAnimationFrame(state.rafID);
             state.pauseTemps = 0;
             state.depart = null;
-
             if (navigator.vibrate) navigator.vibrate(200);
-
             saveState();
             afficher(0);
         };
@@ -253,15 +239,34 @@
 
             if (state.enCours) state.depart = Date.now();
             saveState();
-
             afficher(state.pauseTemps);
         };
 
-        // Mode clair / sombre
+        // ➖ Enlever du temps
+        document.getElementById("btnRemoveTime").onclick = () => {
+            let h = parseInt(document.getElementById("h").value) || 0;
+            let m = parseInt(document.getElementById("m").value) || 0;
+            let s = parseInt(document.getElementById("s").value) || 0;
+
+            let retirer = h * 3600000 + m * 60000 + s * 1000;
+
+            let tempsActuel = (state.enCours ? (Date.now() - state.depart) : 0) + state.pauseTemps;
+
+            if (retirer > tempsActuel) {
+                state.pauseTemps = 0;
+                if (state.enCours) state.depart = Date.now();
+            } else {
+                state.pauseTemps -= retirer;
+                if (state.enCours) state.depart = Date.now();
+            }
+
+            saveState();
+            afficher(state.pauseTemps);
+        };
+
         document.getElementById("btnTheme").onclick = () =>
             document.body.classList.toggle("light");
 
-        // Plein écran
         document.getElementById("btnFull").onclick = () => {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen();
@@ -270,7 +275,6 @@
             }
         };
 
-        // Mode minimal (touche M)
         document.addEventListener("keydown", e => {
             if (e.key.toLowerCase() === "m") {
                 document.body.classList.toggle("minimal");
@@ -282,4 +286,3 @@
 
 </body>
 </html>
-
