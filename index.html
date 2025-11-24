@@ -38,7 +38,7 @@
         }
 
         /* ------------------------------
-           🟦 NAVBAR HORIZONTALE — OPTION C (CAPSULES)
+           🟦 NAVBAR HORIZONTALE — OPTION C
         ------------------------------ */
         #navbar {
             width: 100%;
@@ -54,11 +54,9 @@
             background: var(--panel);
             border-radius: 999px;
             cursor: pointer;
-
             color: var(--fg);
             font-size: 16px;
             font-weight: 500;
-
             border: 1px solid #222;
             opacity: 0.85;
             transition: 0.25s ease;
@@ -79,13 +77,12 @@
         }
 
         /* ------------------------------
-           🟧 CONTAINER PREMIUM
+           🟧 CONTAINER PREMIUM CENTRÉ
         ------------------------------ */
         #content {
             max-width: 900px;
             margin: 0 auto;
             padding: 40px;
-
             background: var(--panel);
             border-radius: 20px;
             box-shadow: 0 0 40px rgba(255,255,255,0.05);
@@ -119,7 +116,7 @@
         }
 
         /* --------------------------------------------
-           🟩 STYLE DU CHRONO (ULTRA PREMIUM)
+           🟩 STYLE DU CHRONO
         -------------------------------------------- */
         #chronoDisplay {
             font-size: 70px;
@@ -166,13 +163,13 @@
         }
 
         #btnStart { background: #2ecc71; }
-        #btnStop { background: #e74c3c; }
+        #btnStop  { background: #e74c3c; }
         #btnReset { background: #7f8c8d; }
-        #btnAdd { background: #3498db; }
-        #btnRemove { background: #d35400; }
+        #btnAdd   { background: #3498db; }
+        #btnRemove{ background: #d35400; }
 
         /* ------------------------------
-           🟧 MODE FOCUS FULLSCREEN
+           🟧 MODE FOCUS
         ------------------------------ */
         #focusOverlay {
             position: fixed;
@@ -195,9 +192,7 @@
             margin-bottom: 20px;
         }
 
-        #exitFocus {
-            background: #e74c3c;
-        }
+        #exitFocus { background: #e74c3c; }
 
         /* ------------------------------
            🟨 POMODORO
@@ -209,7 +204,7 @@
         }
 
         /* ------------------------------
-           🟫 STATS
+           🟫 STATISTIQUES
         ------------------------------ */
         #statsTable {
             background: var(--panel);
@@ -218,8 +213,49 @@
             width: 100%;
             border-collapse: collapse;
         }
+
+        /* ======================================================
+           🌞 FIX DU MODE CLAIR (Chrono + Stats + Inputs + Panel)
+        ====================================================== */
+        body.light #chronoDisplay {
+            background: #ffffff !important;
+            color: #111 !important;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
+        }
+
+        body.light .time-controls input {
+            background: #ffffff !important;
+            border: 1px solid #bbb !important;
+            color: #111 !important;
+        }
+
+        body.light #statsSummary {
+            background: #ffffff !important;
+            color: #111 !important;
+        }
+
+        body.light #statsTable {
+            background: #ffffff !important;
+        }
+
+        body.light #statsTable th {
+            background: #e0e0e0 !important;
+            color: #111 !important;
+        }
+
+        body.light #statsTable td {
+            background: #fafafa !important;
+            color: #111 !important;
+        }
+
+        body.light #content {
+            background: #ffffff !important;
+            color: #111 !important;
+            box-shadow: 0 0 40px rgba(0,0,0,0.05) !important;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- ██████████████████████████████████████████████ -->
